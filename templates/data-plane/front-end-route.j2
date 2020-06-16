@@ -1,0 +1,18 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    haproxy.router.openshift.io/ip_whitelist: "37.26.88.73 37.26.92.73 37.26.88.93 37.26.92.93 {{ snatIP if snatIP is defined else ''}}"
+  labels:
+    name: front-end
+  name: front-end
+  namespace: {{ data_plane_namespace }}
+spec:
+  host: front-end-sock-shop.apps.{{ domainSuffix }}
+  port:
+    targetPort: 8079
+  to:
+    kind: Service
+    name: front-end
+    weight: 100
+  wildcardPolicy: None

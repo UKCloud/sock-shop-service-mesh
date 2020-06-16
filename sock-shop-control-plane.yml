@@ -1,0 +1,17 @@
+- name: Create sock shop control plane namespace
+  k8s:
+    name: "{{ control_plane_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+    wait: true
+
+- name: Create ServiceMeshControlPlane CR
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/control-plane/servicemeshcontrolplane.j2') }}"
+
+- name: Create ServiceMeshMemberRoll CR
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/control-plane/servicemeshmemberroll.j2') }}"

@@ -1,0 +1,17 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+  # TODO - Get domain suffix from currently logged in oc cluster
+    - domainSuffix: <insert_domain_suffix_here>
+    - data_plane_namespace: ss-dp
+    - control_plane_namespace: ss-cp
+  tasks:
+  - name: create the sock shop control plane
+    import_tasks: sock-shop-control-plane.yml
+    tags:
+    - control-plane
+
+  - name: create the sock shop data plane
+    import_tasks: sock-shop-data-plane.yml
+    tags:
+    - data-plane

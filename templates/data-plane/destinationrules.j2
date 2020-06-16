@@ -1,0 +1,7 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: dr-front-end
+  namespace: {{ data_plane_namespace }}
+spec:
+  host: s-front-end

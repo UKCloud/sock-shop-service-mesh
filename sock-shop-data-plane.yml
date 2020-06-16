@@ -1,0 +1,197 @@
+- name: Create sock shop namespace
+  k8s:
+    name: "{{ data_plane_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+    wait: true
+
+- name: ensure namespace is on the control plane member role
+  k8s:
+    state: present
+    namespace: "{{ control_plane_namespace }}"
+    definition:
+      apiVersion: maistra.io/v1
+      kind: ServiceMeshMemberRoll
+      metadata:
+        name: default
+        namespace: "{{ control_plane_namespace }}"
+      spec:
+        members:
+          - "{{ data_plane_namespace }}"
+
+- name: Allow service account to use privileged scc
+  k8s:
+    name: privileged
+    kind: SecurityContextConstraints
+    merge_type: merge
+    definition:
+      users:
+      - system:admin
+      - system:serviceaccount:openshift-infra:build-controller
+      - system:serviceaccount:{{ data_plane_namespace }}:default
+
+- name: Create carts-db deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/carts-db.j2') }}"
+    wait: yes
+    wait_timeout: 240
+
+- name: Create carts-db service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/carts-db-svc.j2') }}"
+
+- name: Create carts deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/carts.j2') }}"
+    wait: yes
+
+- name: Create carts service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/carts-svc.j2') }}"
+
+- name: Create catalogue-db deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/catalogue-db.j2') }}"
+    wait: yes
+
+- name: Create catalogue-db service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/catalogue-db-svc.j2') }}"
+
+- name: Create catalogue deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/catalogue.j2') }}"
+    wait: yes
+
+- name: Create catalogue service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/catalogue-svc.j2') }}"
+
+- name: Create front-end deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/front-end.j2') }}"
+    wait: yes
+
+- name: Create front-end service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/front-end-svc.j2') }}"
+
+# Disabled as ior_enabled: true is set on the service mesh control plane
+# - name: Create front-end route
+#   k8s:
+#     state: present
+#     definition: "{{ lookup('template', 'data-plane/front-end-route.j2') }}"
+
+- name: Create Istio Gateway
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/gateway.j2') }}"
+
+- name: Create Istio VirtualService
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/virtualservice.j2') }}"
+
+- name: Create Istio DestinationRules
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/destinationrules.j2') }}"
+
+- name: Create orders-db deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/orders-db.j2') }}"
+    wait: yes
+
+- name: Create orders-db service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/orders-db-svc.j2') }}"
+
+- name: Create orders deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/orders.j2') }}"
+    wait: yes
+
+- name: Create orders service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/orders-svc.j2') }}"
+
+- name: Create payment deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/payment.j2') }}"
+    wait: yes
+
+- name: Create payment service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/payment-svc.j2') }}"
+
+- name: Create queue-master deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/queue-master.j2') }}"
+    wait: yes
+
+- name: Create queue-master service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/queue-master-svc.j2') }}"
+
+- name: Create rabbitmq deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/rabbitmq.j2') }}"
+    wait: yes
+
+- name: Create rabbitmq service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/rabbitmq-svc.j2') }}"
+
+- name: Create shipping deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/shipping.j2') }}"
+    wait: yes
+
+- name: Create shipping service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/shipping-svc.j2') }}"
+
+- name: Create user-db deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/user-db.j2') }}"
+    wait: yes
+
+- name: Create user-db service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/user-db-svc.j2') }}"
+
+- name: Create user deployment
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/user.j2') }}"
+    wait: yes
+
+- name: Create user service
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'data-plane/user-svc.j2') }}"

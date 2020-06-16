@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: sock-shop
+  namespace: {{ data_plane_namespace }}
+spec:
+  gateways:
+    - ss-gw
+  hosts:
+    - '*'
+  http:
+    - match:
+        - uri:
+            regex: ".*"
+      route:
+        - destination:
+            host: s-front-end
+            port:
+              number: 8079
