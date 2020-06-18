@@ -4,17 +4,19 @@ metadata:
   name: front-end
   namespace: {{ data_plane_namespace }}
   labels:
-      app: front-end
-      version: v1
+    app: front-end
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: front-end
+      app: front-end
+      version: v1
   template:
     metadata:
       labels:
-        name: front-end
+        app: front-end
+        version: v1
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

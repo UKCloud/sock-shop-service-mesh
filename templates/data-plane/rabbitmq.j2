@@ -3,17 +3,20 @@ kind: Deployment
 metadata:
   name: rabbitmq
   labels:
-    name: rabbitmq
+    app: rabbitmq
+    version: v1
   namespace: {{ data_plane_namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: rabbitmq
+      app: rabbitmq
+      version: v1
   template:
     metadata:
       labels:
-        name: rabbitmq
+        app: rabbitmq
+        version: v1
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

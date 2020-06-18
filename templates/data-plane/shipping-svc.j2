@@ -3,7 +3,8 @@ kind: Service
 metadata:
   name: shipping
   labels:
-    name: shipping
+    app: shipping
+    service: shipping
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
@@ -12,4 +13,4 @@ spec:
     port: 80
     targetPort: 80
   selector:
-    name: shipping
+    app: shipping

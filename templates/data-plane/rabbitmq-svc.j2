@@ -3,12 +3,28 @@ kind: Service
 metadata:
   name: rabbitmq
   labels:
-    name: rabbitmq
+    app: rabbitmq
+    service: rabbitmq
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
-    # the port that this service should serve on
-  - port: 5672
-    targetPort: 5672
+  - name: http
+    port: 15672
+    protocol: TCP
+  - name: amqp
+    port: 5672
+    protocol: TCP
+  - name: epmd
+    port: 4369
+    protocol: TCP
+  - name: amqps
+    port: 5671
+    protocol: TCP
+  - name: exporter
+    port: 9419
+    protocol: TCP
+  - name: inter-node
+    port: 25672
+    protocol: TCP
   selector:
-    name: rabbitmq
+    app: rabbitmq

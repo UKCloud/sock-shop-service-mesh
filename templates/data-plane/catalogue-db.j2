@@ -3,17 +3,20 @@ kind: Deployment
 metadata:
   name: catalogue-db
   labels:
-    name: catalogue-db
+    app: catalogue-db
+    version: v1
   namespace: {{ data_plane_namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: catalogue-db
+      app: catalogue-db
+      version: v1
   template:
     metadata:
       labels:
-        name: catalogue-db
+        app: catalogue-db
+        version: v1
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

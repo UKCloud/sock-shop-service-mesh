@@ -3,13 +3,14 @@ kind: Service
 metadata:
   name: user
   labels:
-    name: user
+    app: user
+    service: user
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
   - protocol: TCP
-    name: tcp
+    name: http
     port: 80
     targetPort: 80
   selector:
-    name: user
+    app: user

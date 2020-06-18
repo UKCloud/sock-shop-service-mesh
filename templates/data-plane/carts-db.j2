@@ -4,16 +4,22 @@ metadata:
   name: carts-db
   labels:
     name: carts-db
+    app: carts
+    version: v1
   namespace: "{{ data_plane_namespace }}"
 spec:
   replicas: 1
   selector:
     matchLabels:
       name: carts-db
+      app: carts
+      version: v1
   template:
     metadata:
       labels:
         name: carts-db
+        app: carts
+        version: v1
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

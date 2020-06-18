@@ -3,17 +3,20 @@ kind: Deployment
 metadata:
   name: queue-master
   labels:
-    name: queue-master
+    app: queue-master
+    version: v1
   namespace: {{ data_plane_namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: queue-master
+      app: queue-master
+      version: v1
   template:
     metadata:
       labels:
-        name: queue-master
+        app: queue-master
+        version: v1
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

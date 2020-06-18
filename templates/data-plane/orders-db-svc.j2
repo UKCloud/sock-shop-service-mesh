@@ -3,12 +3,14 @@ kind: Service
 metadata:
   name: orders-db
   labels:
-    name: orders-db
+    app: orders-db
+    service: orders-db
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
-    # the port that this service should serve on
-  - port: 27017
+  - protocol: TCP
+    name: mongodb
+    port: 27017
     targetPort: 27017
   selector:
-    name: orders-db
+    app: orders-db

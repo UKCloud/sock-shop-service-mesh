@@ -8,7 +8,7 @@ spec:
     istio: ingressgateway
   servers:
     - hosts:
-        - '*'
+        - {{ "'*'" if host_url is undefined else host_url }}
       port:
         name: http
         number: 80

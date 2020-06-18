@@ -3,14 +3,15 @@ kind: Service
 metadata:
   name: s-front-end
   labels:
-    name: s-front-end
+    app: front-end
     service: s-front-end
+    version: v1
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
   - protocol: TCP
-    name: tcp
+    name: http
     port: 80
     targetPort: 8079
   selector:
-    name: front-end
+    app: front-end

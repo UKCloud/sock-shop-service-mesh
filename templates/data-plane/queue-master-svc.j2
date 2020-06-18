@@ -3,15 +3,16 @@ kind: Service
 metadata:
   name: queue-master
   labels:
-    name: queue-master
+    app: queue-master
+    service: queue-master
   annotations:
     prometheus.io/path: "/prometheus"
   namespace: {{ data_plane_namespace }}
 spec:
   ports:
   - protocol: TCP
-    name: tcp
+    name: http
     port: 80
     targetPort: 80
   selector:
-    name: queue-master
+    app: queue-master
